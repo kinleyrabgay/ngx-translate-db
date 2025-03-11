@@ -57,8 +57,8 @@ import { TranslatePipe } from 'ngx-translate-db';
 @Component({
   selector: 'app-root',
   template: `
-    <h1>{{ 'WELCOME_MESSAGE' | translate }}</h1>
-    <button>{{ 'BTN_LOGIN' | translate }}</button>
+    <h1>{{ 'WELCOME_MESSAGE' | appTranslate }}</h1>
+    <button>{{ 'BTN_LOGIN' | appTranslate }}</button>
   `,
   standalone: true,
   imports: [TranslatePipe]
