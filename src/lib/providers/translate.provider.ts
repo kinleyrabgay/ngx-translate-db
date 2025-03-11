@@ -1,7 +1,7 @@
 import { Provider } from "@angular/core";
 import { TranslateService } from "../services/translate.service";
 import { TranslationConfig } from "../interfaces/translation.interface";
-import { TranslatePipe } from "dist";
+import { TranslatePipe } from "../pipes/translate.pipe";
 
 export function provideTranslate(config: TranslationConfig): Provider[] {
   return [
