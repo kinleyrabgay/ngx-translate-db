@@ -1,7 +1,7 @@
 /*
  * Public API Surface of ngx-translate-db
  */
-export { TranslateService } from './lib/service/translate.service';
-export { TranslatePipe } from './lib/pipe/translate.pipe';
-export { TranslateDBModule } from './lib/translate.module';
-export { TranslationConfig } from './lib/interface/translation.interface'; 
+export { TranslateService } from './lib/services/translate.service';
+export { TranslatePipe } from './lib/pipes/translate.pipe';
+export { TranslationConfig } from './lib/interfaces/translation.interface';
+export { provideTranslate } from './lib/providers/translate.provider'; 

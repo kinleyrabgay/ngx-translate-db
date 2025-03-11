@@ -1,5 +1,5 @@
 import { Injectable, Inject, Optional } from '@angular/core';
-import { TranslationConfig, TranslationValue } from '../interface/translation.interface';
+import { TranslationConfig, TranslationValue } from '../interfaces/translation.interface';
 import { TranslationDBService } from './translate-db.service';
 
 @Injectable({

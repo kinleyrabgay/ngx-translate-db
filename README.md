@@ -10,7 +10,7 @@ A lightweight, efficient Angular translation library that uses IndexedDB for off
 - 🚀 Lightweight and fast
 - 💾 Offline-first using IndexedDB
 - 🔄 Automatic caching
-- 📦 Module-specific translations
+- 📦 Standalone components support
 - 🎯 Type-safe
 - ⚡ Synchronous translations
 - 🔌 Easy API integration
@@ -31,29 +31,24 @@ yarn add ngx-translate-db
 
 ## Quick Start
 
-1. **Import and configure in your app.config.ts:**
+1. **Configure in your app.config.ts using the provider:**
 
 ```typescript
 import { ApplicationConfig } from '@angular/core';
-import { TranslateDBService } from 'ngx-translate-db';
+import { provideTranslate } from 'ngx-translate-db';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    {
-      provide: 'TRANSLATE_CONFIG',
-      useValue: {
-        projectId: 'your-project-id',
-        endpoint: 'https://your-api.com/translations',
-        defaultLang: 'en',
-        dbName: 'your-app-name',
-        moduleName: 'root'
-      }
-    }
+    provideTranslate({
+      projectId: 'your-project-id',
+      endpoint: 'https://your-api.com/translations',
+      defaultLang: 'en',
+    })
   ]
 };
 ```
 
-2. **Use in your components:**
+2. **Use in your standalone components:**
 
 ```typescript
 import { Component } from '@angular/core';
@@ -69,6 +64,20 @@ import { TranslatePipe } from 'ngx-translate-db';
   imports: [TranslatePipe]
 })
 export class AppComponent {}
+```
+
+3. **Or configure for specific features:**
+
+```typescript
+@Component({
+  // ...
+  providers: [
+    provideTranslate({
+      ...config,
+    })
+  ]
+})
+export class AdminFeatureComponent {}
 ```
 
 ## Translation Format
@@ -101,19 +110,19 @@ Translations should follow this structure:
 | defaultLang | string | Default language code |
 | apiKey? | string | Optional API key for authentication |
 | dbName | string | Name for IndexedDB database |
-| moduleName | string | Module identifier for translations |
+| moduleName | string | Feature identifier for translations |
 
-### TranslateDBService
+### TranslateService
 
 ```typescript
-class TranslateDBService {
+class TranslateService {
   // Change current language
   async setLanguage(lang: string): Promise<void>
 
   // Get translation synchronously
   instant(key: string): string
 
-  // Clear module-specific cache
+  // Clear feature-specific cache
   async clearModuleCache(): Promise<void>
 
   // Clear all translations
@@ -124,26 +133,23 @@ class TranslateDBService {
 ### TranslatePipe
 
 ```typescript
-{{ 'TRANSLATION_KEY' | translate }}
+{{ 'TRANSLATION_KEY' | appTranslate }}
 ```
 
-## Module-Specific Translations
+## Feature-Specific Translations
 
-For feature modules, configure with a different moduleName:
+Configure translations for specific features using the provider:
 
 ```typescript
-{
-  provide: 'TRANSLATE_CONFIG',
-  useValue: {
-    ...config,
-    moduleName: 'admin-module'
-  }
-}
+provideTranslate({
+  ...config,
+  moduleName: 'admin-feature'
+})
 ```
 
 ## Caching Strategy
 
-- Translations are stored in IndexedDB per module
+- Translations are stored in IndexedDB per feature
 - In-memory cache for fast synchronous access
 - Background sync with API
 - Automatic cache invalidation on language change
@@ -151,9 +157,10 @@ For feature modules, configure with a different moduleName:
 ## Best Practices
 
 1. Use meaningful translation keys (e.g., 'BTN_LOGIN' instead of 'button1')
-2. Group translations by module to improve load time
+2. Group translations by feature to improve load time
 3. Implement proper error handling for missing translations
 4. Use type-safe translation keys when possible
+5. Leverage standalone components for better tree-shaking
 
 ## Contributing
 

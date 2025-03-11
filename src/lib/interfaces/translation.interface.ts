@@ -1,5 +1,11 @@
 export interface TranslationValue {
-  [lang: string]: string;
+  [key: string]: string;
+}
+
+export interface Translations {
+  [lang: string]: {
+    [key: string]: string;
+  };
 }
 
 export interface TranslationConfig {
@@ -7,4 +13,5 @@ export interface TranslationConfig {
   endpoint: string;
   defaultLang: string;
   apiKey?: string;
+  translations?: Translations;
 }
