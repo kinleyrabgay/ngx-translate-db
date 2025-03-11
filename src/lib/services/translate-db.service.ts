@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { openDB, IDBPDatabase, deleteDB } from 'idb';
+import { TranslationValue } from '../interfaces/translation.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,12 +23,26 @@ export class TranslationDBService {
     }
   }
 
-  async saveToCache(key: string, value: { [lang: string]: string }): Promise<void> {
+  async saveToCache(key: string, value: TranslationValue): Promise<void> {
     await this.db.put('translations', value, key);
   }
 
-  async getFromCache(key: string): Promise<{ [lang: string]: string } | null> {
+  async getFromCache(key: string): Promise<TranslationValue | null> {
     return await this.db.get('translations', key);
+  }
+
+  async getAllFromCache(): Promise<{ [key: string]: TranslationValue }> {
+    const allKeys = await this.db.getAllKeys('translations');
+    const result: { [key: string]: TranslationValue } = {};
+    
+    for (const key of allKeys) {
+      const value = await this.getFromCache(key.toString());
+      if (value) {
+        result[key.toString()] = value;
+      }
+    }
+    
+    return result;
   }
 
   async clearCache(): Promise<void> {
