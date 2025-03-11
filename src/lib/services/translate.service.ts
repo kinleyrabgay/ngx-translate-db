@@ -83,10 +83,10 @@ export class TranslateService {
   }
 
   instant(key: string): string {
-    if (!this.initialized) {
-      console.warn('[TranslateService] Service not initialized yet');
-      return key;
-    }
+    // if (!this.initialized) {
+    //   console.warn('[TranslateService] Service not initialized yet');
+    //   return key;
+    // }
 
     console.log(`[TranslateService] Looking up translation for key: ${key}`);
     console.log(`[TranslateService] Current language: ${this.currentLang}`);
