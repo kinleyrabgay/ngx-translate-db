@@ -3,20 +3,39 @@ import { TranslateService } from '../services/translate.service';
 
 @Pipe({
   name: 'appTranslate',
-  standalone: true
+  standalone: true,
+  pure: false // Make pipe impure to handle async updates
 })
 export class TranslatePipe implements PipeTransform {
+  private lastKey: string = '';
+  private lastValue: string = '';
+  private loading: boolean = false;
+
   constructor(private translateService: TranslateService) {}
 
-  transform(key: string): string {
+  async transform(key: string): Promise<string> {
     if (!key) return '';
     
-    // Add logging to debug translation process
-    console.log(`[TranslatePipe] Attempting to translate key: ${key}`);
-    
-    const result = this.translateService.instant(key);
-    console.log(`[TranslatePipe] Translation result for ${key}:`, result);
-    
-    return result;
+    if (this.loading && this.lastKey === key) {
+      return this.lastValue;
+    }
+
+    try {
+      this.loading = true;
+      this.lastKey = key;
+      
+      console.log(`[TranslatePipe] Attempting to translate key: ${key}`);
+      const result = await this.translateService.instant(key);
+      
+      this.lastValue = result;
+      console.log(`[TranslatePipe] Translation result for ${key}:`, result);
+      
+      return result;
+    } catch (error) {
+      console.error(`[TranslatePipe] Error translating key ${key}:`, error);
+      return key;
+    } finally {
+      this.loading = false;
+    }
   }
-} 
+}
