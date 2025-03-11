@@ -1,9 +1,10 @@
 import { Injectable, Inject, Optional } from '@angular/core';
 import { TranslationConfig, TranslationValue } from '../interfaces/translation.interface';
 import { TranslationDBService } from './translate-db.service';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TranslateService {
   private currentLang: string = 'en';
@@ -11,6 +12,8 @@ export class TranslateService {
   private initialized = false;
   private config!: TranslationConfig;
   private initPromise: Promise<void> | null = null;
+  private translationsSubject = new BehaviorSubject<{ [key: string]: string }>({});
+  public translations$ = this.translationsSubject.asObservable();
 
   constructor(
     private dbService: TranslationDBService,
@@ -67,6 +70,7 @@ export class TranslateService {
             this.translations[key] = translation as TranslationValue;
           }
         }
+        this.translationsSubject.next(this.flattenTranslations(this.translations));
         return;
       }
 
@@ -75,10 +79,22 @@ export class TranslateService {
         await this.dbService.saveToCache(key, value);
         this.translations[key] = value;
       }
+      this.translationsSubject.next(this.flattenTranslations(this.translations));
     } catch (error) {
       console.error('Error loading translations:', error);
       throw error;
     }
+  }
+
+  private flattenTranslations(translations: { [key: string]: TranslationValue }): { [key: string]: string } {
+    const flattened: { [key: string]: string } = {};
+    for (const [key, value] of Object.entries(translations)) {
+      // Assuming we need to use the currentLang as the language key
+      if (value[this.currentLang]) {
+        flattened[key] = value[this.currentLang];
+      }
+    }
+    return flattened;
   }
 
   private async fetchTranslations(): Promise<{ [key: string]: TranslationValue }> {
@@ -103,35 +119,38 @@ export class TranslateService {
     }
   }
 
-  instant(key: string): string {
+  instant(key: string): Observable<string> {
     if (!this.initialized) {
       console.warn('[TranslateService] Service not initialized yet, returning key');
-      return key;
+      return of(key);
     }
 
     const translation = this.translations[key];
     if (!translation) {
-      return key;
+      return of(key);
     }
 
-    return translation[this.currentLang] || key;
+    return of(translation[this.currentLang] || key);
   }
 
   async setLanguage(lang: string): Promise<void> {
     await this.ensureInitialized();
     this.currentLang = lang;
+    this.translationsSubject.next(this.flattenTranslations(this.translations));
   }
 
   async clearModuleCache(): Promise<void> {
     await this.ensureInitialized();
     await this.dbService.clearCache();
     this.translations = {};
+    // this.translationsSubject.next(this.translations);
   }
 
   async clearAllCache(): Promise<void> {
     await this.ensureInitialized();
     await this.dbService.clearDB();
     this.translations = {};
+    // this.translationsSubject.next(this.translations);
     this.initialized = false;
   }
 }

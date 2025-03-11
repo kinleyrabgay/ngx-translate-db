@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { openDB, IDBPDatabase, deleteDB } from 'idb';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TranslationDBService {
   private db!: IDBPDatabase;
