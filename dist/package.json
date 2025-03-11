@@ -1,0 +1,44 @@
+{
+  "name": "ngx-translate-db",
+  "version": "1.0.8",
+  "license": "MIT",
+  "description": "Angular translation library using IndexedDB for storage",
+  "author": {
+    "name": "Kinley Rabgay",
+    "url": "https://kinleyrabgay.vercel.app/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kinleyrabgay/ngx-translate-db"
+  },
+  "keywords": [
+    "angular",
+    "translation",
+    "i18n",
+    "indexeddb",
+    "offline",
+    "localization"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^17.1.0",
+    "@angular/core": "^17.1.0",
+    "idb": "^7.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "module": "fesm2022/ngx-translate-db.mjs",
+  "typings": "index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./esm2022/ngx-translate-db.mjs",
+      "esm": "./esm2022/ngx-translate-db.mjs",
+      "default": "./fesm2022/ngx-translate-db.mjs"
+    }
+  }
+}
