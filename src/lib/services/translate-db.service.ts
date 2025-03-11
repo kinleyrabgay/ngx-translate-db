@@ -34,9 +34,7 @@ export class TranslationDBService {
 
   async getFromCache(key: string): Promise<{ [lang: string]: string } | null> {
     try {
-      const value = await this.db.get('translations', key);
-      console.log(`[TranslationDBService] Retrieved from cache - Key: ${key}`, value);
-      return value;
+      return await this.db.get('translations', key);
     } catch (error) {
       console.error(`[TranslationDBService] Error getting from cache for key ${key}:`, error);
       throw error;
@@ -45,9 +43,7 @@ export class TranslationDBService {
 
   async getAllKeys(): Promise<string[]> {
     try {
-      const keys = await this.db.getAllKeys('translations');
-      console.log('[TranslationDBService] Retrieved all keys:', keys);
-      return keys as string[];
+      return await this.db.getAllKeys('translations') as string[];
     } catch (error) {
       console.error('[TranslationDBService] Error getting all keys:', error);
       throw error;
@@ -56,7 +52,6 @@ export class TranslationDBService {
 
   async clearCache(): Promise<void> {
     try {
-      console.log('[TranslationDBService] Clearing cache');
       await this.db.clear('translations');
     } catch (error) {
       console.error('[TranslationDBService] Error clearing cache:', error);
@@ -66,7 +61,6 @@ export class TranslationDBService {
 
   async clearDB(): Promise<void> {
     try {
-      console.log('[TranslationDBService] Clearing database');
       await this.db.close();
       await deleteDB('translations-db');
     } catch (error) {
