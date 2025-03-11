@@ -23,24 +23,29 @@ export class TranslateService {
   }
 
   private async ensureInitialized(): Promise<void> {
-    if (this.initialized) return;
+    if (this.initialized) {
+      return;
+    }
+
     if (!this.initPromise) {
+      console.warn('[TranslateService] No configuration provided. Using default settings.');
       this.initPromise = this.init({
         defaultLang: 'en',
         projectId: 'default',
         endpoint: '',
-        translations: {}
       });
     }
+
     await this.initPromise;
   }
 
   async init(config: TranslationConfig): Promise<void> {
-    if (this.initialized) return;
+    if (this.initialized) {
+      return;
+    }
 
     this.config = config;
     this.currentLang = config.defaultLang;
-    console.log('[TranslateService] Initializing with config:', config);
 
     try {
       await this.dbService.init();
@@ -78,22 +83,38 @@ export class TranslateService {
 
   private async fetchTranslations(): Promise<{ [key: string]: TranslationValue }> {
     try {
-      return {
-        "BTN_LOGIN": { "en": "Logging from here", "fr": "Connexion", "it": "Accesso" },
-        "BTN_REGISTER": { "en": "Register", "fr": "S'inscrire", "it": "Registrati" },
-        "BTN_LOGOUT": { "en": "Logout", "fr": "Déconnexion", "it": "Disconnettersi" },
-        "BTN_PROFILE": { "en": "Profile", "fr": "Profil", "it": "Profilo" }
-      };
+      if (!this.config.endpoint) {
+        return {
+          "BTN_LOGIN": { "en": "Login", "fr": "Connexion", "it": "Accesso" },
+          "BTN_REGISTER": { "en": "Register", "fr": "S'inscrire", "it": "Registrati" },
+          "BTN_LOGOUT": { "en": "Logout", "fr": "Déconnexion", "it": "Disconnettersi" },
+          "BTN_PROFILE": { "en": "Profile", "fr": "Profil", "it": "Profilo" }
+        };
+      }
+
+      const response = await fetch(this.config.endpoint);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error('Error fetching translations:', error);
       return {};
     }
   }
 
-  async instant(key: string): Promise<string> {
-    await this.ensureInitialized();
+  instant(key: string): string {
+    if (!this.initialized) {
+      console.warn('[TranslateService] Service not initialized yet, returning key');
+      return key;
+    }
+
     const translation = this.translations[key];
-    return translation ? translation[this.currentLang] || key : key;
+    if (!translation) {
+      return key;
+    }
+
+    return translation[this.currentLang] || key;
   }
 
   async setLanguage(lang: string): Promise<void> {

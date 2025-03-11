@@ -1,17 +1,16 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, OnDestroy } from '@angular/core';
 import { TranslateService } from '../services/translate.service';
 
 @Pipe({
   name: 'appTranslate',
   standalone: true,
-  pure: false
+  pure: true
 })
 export class TranslatePipe implements PipeTransform {
-
   constructor(private translateService: TranslateService) {}
 
-  async transform(key: string): Promise<string> {
-    if (!key) return key;
+  transform(key: string): string {
+    if (!key) return '';
     return this.translateService.instant(key);
   }
 }

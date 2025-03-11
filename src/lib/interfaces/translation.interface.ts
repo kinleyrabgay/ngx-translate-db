@@ -13,5 +13,4 @@ export interface TranslationConfig {
   endpoint: string;
   defaultLang: string;
   apiKey?: string;
-  translations?: Translations;
 }
