@@ -1,37 +1,25 @@
 # ngx-translate-db
 
-A lightweight, efficient Angular translation library that uses IndexedDB for offline storage. Perfect for applications that need to handle translations without network dependency.
-
-[![npm version](https://badge.fury.io/js/ngx-translate-db.svg)](https://www.npmjs.com/package/ngx-translate-db)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+A robust, offline-first translation library for Angular applications with IndexedDB support.
 
 ## Features
 
-- 🚀 Lightweight and fast
-- 💾 Offline-first using IndexedDB
-- 🔄 Automatic caching
-- 📦 Standalone components support
-- 🎯 Type-safe
-- ⚡ Synchronous translations
-- 🔌 Easy API integration
-- 📱 Mobile-friendly
+- 🔄 Dynamic language switching
+- 💾 Offline-first with IndexedDB storage
+- 🚀 Reactive translations using Observables
+- 🔍 Type-safe translation keys
+- 📱 Memory efficient with automatic cleanup
+- 🎯 Zero dependencies (except Angular core)
 
 ## Installation
 
 ```bash
 npm install ngx-translate-db
-# or
-yarn add ngx-translate-db
 ```
-
-## Requirements
-
-- Angular 17+
-- IndexedDB support in the browser
 
 ## Quick Start
 
-1. **Configure in your app.config.ts using the provider:**
+### 1. Configure in app.config.ts
 
 ```typescript
 import { ApplicationConfig } from '@angular/core';
@@ -39,147 +27,129 @@ import { provideTranslate } from 'ngx-translate-db';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    // ... other providers
     provideTranslate({
       projectId: 'your-project-id',
-      endpoint: 'https://your-api.com/translations',
+      endpoint: 'https://your-api-endpoint',
       defaultLang: 'en',
-    })
-  ]
+      apiKey: 'optional-api-key',
+      acceptedLanguages: ['en', 'fr', 'it', 'de', '...'],
+    }),
+  ],
 };
 ```
 
-2. **Use in your standalone components:**
+### 2. Use in Components
 
 ```typescript
 import { Component } from '@angular/core';
-import { TranslatePipe } from 'ngx-translate-db';
+import { TranslatePipe, TranslateService } from 'ngx-translate-db';
 
 @Component({
   selector: 'app-root',
   template: `
-    <h1>{{ 'WELCOME_MESSAGE' | translate }}</h1>
-    <button>{{ 'BTN_LOGIN' | translate }}</button>
+    <div>
+      <!-- Using the pipe -->
+      <p>{{ 'WELCOME_MESSAGE' | appTranslate | async }}</p>
+      
+      <!-- Language switcher -->
+      <button (click)="changeLanguage('en')">English</button>
+      <button (click)="changeLanguage('fr')">Français</button>
+    </div>
   `,
-  standalone: true,
-  imports: [TranslatePipe]
+  imports: [TranslatePipe],
+  standalone: true
 })
-export class AppComponent {}
-```
+export class AppComponent {
+  constructor(private translate: TranslateService) {}
 
-3. **Or configure for specific features:**
-
-```typescript
-@Component({
-  // ...
-  providers: [
-    provideTranslate({
-      ...config,
-    })
-  ]
-})
-export class AdminFeatureComponent {}
-```
-
-## Translation Format
-
-Translations should follow this structure:
-
-```typescript
-{
-  "BTN_LOGIN": {
-    "en": "Login",
-    "fr": "Connexion",
-    "es": "Iniciar sesión"
-  },
-  "WELCOME_MESSAGE": {
-    "en": "Welcome",
-    "fr": "Bienvenue",
-    "es": "Bienvenido"
+  changeLanguage(lang: string): void {
+    this.translate.setLanguage(lang);
   }
 }
 ```
 
+### 3. Using the Translation Pipe
+
+The `appTranslate` pipe is designed to be used with Angular's `async` pipe:
+
+```html
+<!-- Basic usage -->
+{{ 'TRANSLATION_KEY' | appTranslate | async }}
+
+<!-- With variables -->
+{{ dynamicKey | appTranslate | async }}
+
+<!-- In attributes -->
+<div [title]="'TOOLTIP_KEY' | appTranslate | async">
+```
+
 ## API Reference
-
-### Configuration Options
-
-| Option | Type | Description |
-|--------|------|-------------|
-| projectId | string | Unique identifier for your project |
-| endpoint | string | API endpoint for fetching translations |
-| defaultLang | string | Default language code |
-| apiKey? | string | Optional API key for authentication |
-| dbName | string | Name for IndexedDB database |
-| moduleName | string | Feature identifier for translations |
 
 ### TranslateService
 
+The core service for handling translations.
+
 ```typescript
 class TranslateService {
-  // Change current language
-  async setLanguage(lang: string): Promise<void>
-
+  // Get current language
+  get currentLanguage(): string;
+  
+  // Get list of supported languages
+  get supportedLanguages(): string[];
+  
+  // Change language
+  async setLanguage(lang: string): Promise<void>;
+  
   // Get translation synchronously
-  instant(key: string): string
-
-  // Clear feature-specific cache
-  async clearModuleCache(): Promise<void>
-
-  // Clear all translations
-  async clearAllCache(): Promise<void>
+  instant(key: string): string;
+  
+  // Get translation asynchronously
+  async translate(key: string): Promise<string>;
+  
+  // Observable for language changes
+  get onLangChange(): Observable<string>;
 }
 ```
 
-### TranslatePipe
+### Configuration Options
 
 ```typescript
-{{ 'TRANSLATION_KEY' | appTranslate }}
+interface TranslationConfig {
+  projectId: string;                // Your project identifier
+  endpoint: string;                 // API endpoint for fetching translations
+  defaultLang: string;              // Default language to use
+  apiKey?: string;                  // Optional API key for authentication
+  acceptedLanguages: string[];      // List of supported languages
+}
 ```
 
-## Feature-Specific Translations
+## Memory Management
 
-Configure translations for specific features using the provider:
+The library is designed to be memory efficient:
 
-```typescript
-provideTranslate({
-  ...config,
-  moduleName: 'admin-feature'
-})
-```
+- Uses Angular's async pipe for automatic subscription cleanup
+- No memory leaks as subscriptions are properly managed
+- Efficient change detection through Observable pattern
+- IndexedDB for offline storage without memory overhead
 
-## Caching Strategy
+## Performance Considerations
 
-- Translations are stored in IndexedDB per feature
-- In-memory cache for fast synchronous access
-- Background sync with API
-- Automatic cache invalidation on language change
+- Translations are cached in IndexedDB
+- Change detection only triggers when needed
+- Lazy loading of translations
+- Efficient pipe implementation with minimal overhead
 
-## Best Practices
+## Browser Support
 
-1. Use meaningful translation keys (e.g., 'BTN_LOGIN' instead of 'button1')
-2. Group translations by feature to improve load time
-3. Implement proper error handling for missing translations
-4. Use type-safe translation keys when possible
-5. Leverage standalone components for better tree-shaking
+- All modern browsers with IndexedDB support
+- Fallback mechanism for older browsers
+- Tested on latest Chrome, Firefox, Safari, and Edge
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! Please read our contributing guidelines before submitting pull requests.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Author
-
-[Kinley Rabgay](https://kinleyrabgay.vercel.app/)
-
-## Support
-
-If you find this package helpful, please consider giving it a star ⭐ on GitHub! 
+MIT License - see LICENSE file for details 
