@@ -9,10 +9,7 @@ export function provideTranslate(config: TranslationConfig): Provider[] {
     TranslatePipe,
     {
       provide: APP_INITIALIZER,
-      useFactory: (service: TranslateService) => {
-        console.log('initializeTranslation', service, config);
-        return () => service.init(config);
-      },
+      useFactory: (translateService: TranslateService) => () => translateService.init(config),
       deps: [TranslateService],
       multi: true
     }

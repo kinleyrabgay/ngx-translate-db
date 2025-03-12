@@ -28,15 +28,20 @@ export class TranslateService {
    * Initialize the translation service
    */
   async init(config: TranslationConfig): Promise<void> {
-    try {
-      this.currentLang = config.defaultLang;
-      await this.dbService.init();
-      await this.loadTranslations(config);
-      this.loadingState.next(false);
-    } catch (error) {
-      console.error("Error initializing translation service:", error);
-      throw new Error("Translation initialization failed");
+    if (!this.initPromise) {
+      this.initPromise = (async () => {
+        try {
+          this.currentLang = config.defaultLang;
+          await this.dbService.init();
+          await this.loadTranslations(config);
+          this.loadingState.next(false);
+        } catch (error) {
+          console.error("Error initializing translation service:", error);
+          throw new Error("Translation initialization failed");
+        }
+      })();
     }
+    return this.initPromise;
   }
 
   /**
