@@ -1,10 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import {
-  TranslationConfig,
-  TranslationValue,
-  TranslationLanguage,
-} from "../interfaces/translation.interface";
+import { TranslationConfig, TranslationValue, TranslationLanguage } from "../interfaces/translation.interface";
 import { TranslationDBService } from "./translate-db.service";
 
 /**
@@ -301,9 +297,7 @@ export class TranslateService {
   
       // Parse the response JSON
       const data: { [key: string]: TranslationValue } = await response.json();
-  
-      console.log('Translations fetched:', data);
-  
+    
       // Iterate through the translations and save them to cache and set
       await Promise.all(
         Object.entries(data).map(async ([key, value]) => {
