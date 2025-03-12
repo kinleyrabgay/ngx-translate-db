@@ -168,8 +168,12 @@ export class TranslateService {
     if (!this.isLanguageSupported(lang)) {
       throw new Error(`Language '${lang}' is not supported. Accepted languages are: ${this.acceptedLanguages.join(', ')}`);
     }
+
+    console.log('setLanguage', lang);
     
     this.currentLang = lang;
+
+    console.log('setLanguage', this.currentLang);
     this.langChangeSubject.next(lang);
   }
 
@@ -250,6 +254,7 @@ export class TranslateService {
     }
 
     const value = translation[this.currentLang];
+    console.log(key, value, translation, this.currentLang);
     return value ?? this.getTranslationFallback(key);
   }
 
