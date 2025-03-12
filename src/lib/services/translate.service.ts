@@ -27,7 +27,7 @@ export class TranslateService {
   /**
    * Initialize the translation service
    */
-  private async init(config: TranslationConfig): Promise<void> {
+  async init(config: TranslationConfig): Promise<void> {
     try {
       this.currentLang = config.defaultLang;
       await this.dbService.init();
