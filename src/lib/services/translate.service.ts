@@ -162,7 +162,8 @@ export class TranslateService {
     }
     
     if (!this.isLanguageSupported(lang)) {
-      throw new Error(`Language '${lang}' is not supported. Accepted languages are: ${this.acceptedLanguages.join(', ')}`);
+      console.warn(`Warning: Language '${lang}' is not supported. Falling back to default '${this.acceptedLanguages[0]}'`);
+      lang = this.acceptedLanguages[0];
     }
     
     this.currentLang = lang;
@@ -227,7 +228,8 @@ export class TranslateService {
    */
   private async waitForInitialization(): Promise<void> {
     if (!this.initPromise) {
-      throw new Error('Translation service not initialized. Please provide configuration in your app.config.ts');
+      console.warn("Warning: Translation service not initialized. Using default fallback.");
+      return;
     }
     await this.initPromise;
   }
@@ -281,24 +283,19 @@ export class TranslateService {
    */
   private async loadTranslations(config: TranslationConfig): Promise<void> {
     try {
-      // Fetch the translations from the provided endpoint
       const response = await fetch(`${config.endpoint}?projectId=${config.projectId}&apiKey=${config.apiKey}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         mode: 'cors',
       });
   
-      // Check if the response is OK (status code 200)
       if (!response.ok) {
-        throw new Error(`Failed to fetch translations: ${response.statusText}`);
+        console.warn(`Warning: Failed to fetch translations from API: ${response.statusText}`);
+        return await this.loadFromCache();
       }
   
-      // Parse the response JSON
       const data: { [key: string]: TranslationValue } = await response.json();
-    
-      // Iterate through the translations and save them to cache and set
+      
       await Promise.all(
         Object.entries(data).map(async ([key, value]) => {
           await this.dbService.saveToCache(key, value);
@@ -306,17 +303,24 @@ export class TranslateService {
         })
       );
     } catch (error) {
-      console.error("Error loading translations:", error);
-  
-      // Fallback: Load translations from cache if API fails
-      const cachedTranslations = await this.dbService.getAllFromCache();
-      if (Object.keys(cachedTranslations).length > 0) {
-        Object.entries(cachedTranslations).forEach(([key, value]) => {
-          this.translations.set(key, value);
-        });
-      } else {
-        throw new Error("Failed to load translations from both API and cache");
-      }
+      console.warn("Warning: Error loading translations from API:", error);
+      await this.loadFromCache();
     }
   }
+  
+  /**
+   * Loads translations from the cache as a fallback.
+   */
+  private async loadFromCache(): Promise<void> {
+    const cachedTranslations = await this.dbService.getAllFromCache();
+    
+    if (Object.keys(cachedTranslations).length > 0) {
+      Object.entries(cachedTranslations).forEach(([key, value]) => {
+        this.translations.set(key, value);
+      });
+      console.info("Loaded translations from cache.");
+    } else {
+      console.warn("No cached translations found. Defaulting to keys.");
+    }
+  }  
 }

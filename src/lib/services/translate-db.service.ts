@@ -49,7 +49,6 @@ export class TranslationDBService {
       });
     } catch (error) {
       console.error('Error initializing translation database:', error);
-      throw new Error('Failed to initialize translation database');
     }
   }
 
@@ -66,7 +65,6 @@ export class TranslationDBService {
       await this.db.put(this.STORE_NAME, value, key);
     } catch (error) {
       console.error('Error saving translation to cache:', error);
-      throw new Error('Failed to save translation to cache');
     }
   }
 
@@ -123,7 +121,6 @@ export class TranslationDBService {
       await this.db.clear(this.STORE_NAME);
     } catch (error) {
       console.error('Error clearing translation cache:', error);
-      throw new Error('Failed to clear translation cache');
     }
   }
 
@@ -143,7 +140,6 @@ export class TranslationDBService {
       }
     } catch (error) {
       console.error('Error deleting translation database:', error);
-      throw new Error('Failed to delete translation database');
     }
   }
 
@@ -167,7 +163,7 @@ export class TranslationDBService {
    */
   private ensureDBInitialized(): void {
     if (!this.db) {
-      throw new Error('Translation database not initialized. Call init() first.');
+      console.warn('Translation database not initialized. Call init() first.');
     }
   }
 }
