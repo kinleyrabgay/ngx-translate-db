@@ -110,7 +110,6 @@ export class TranslateService {
   }
 
   private getTranslationFallback(key: string): string {
-    // Try to get translation from any available language as fallback
     const translation = this.translations[key];
     if (translation) {
       const languages = Object.keys(translation);
@@ -137,8 +136,6 @@ export class TranslateService {
       }
     } catch (error) {
       console.error("Error loading translations:", error);
-
-      // Try to load from cache as fallback
       const cachedTranslations = await this.dbService.getAllFromCache();
       if (Object.keys(cachedTranslations).length > 0) {
         this.translations = cachedTranslations;
