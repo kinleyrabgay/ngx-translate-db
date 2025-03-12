@@ -291,6 +291,7 @@ export class TranslateService {
         headers: {
           'Content-Type': 'application/json',
         },
+        mode: 'cors',
       });
   
       // Check if the response is OK (status code 200)
@@ -323,43 +324,5 @@ export class TranslateService {
         throw new Error("Failed to load translations from both API and cache");
       }
     }
-  }  
-  // private async loadTranslations(config: TranslationConfig): Promise<void> {
-  //   try {
-  //     // TODO: Replace with actual API call using config.endpoint
-  //     // const response = {
-  //     //   BTN_LOGIN: { en: "Logging from here", fr: "Connexion", it: "Accesso" },
-  //     //   BTN_REGISTER: { en: "Register", fr: "S'inscrire", it: "Registrati" },
-  //     //   BTN_LOGOUT: { en: "Logout", fr: "Déconnexion", it: "Disconnettersi" },
-  //     //   BTN_PROFILE: { en: "Profile", fr: "Profil", it: "Profilo" },
-  //     // };
-
-  //     const response = await fetch(`${config.endpoint}?projectId=${config.projectId}&apiKey=${config.apiKey}`, {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     console.log(response);
-
-  //     await Promise.all(
-  //       Object.entries(response).map(async ([key, value]) => {
-  //         await this.dbService.saveToCache(key, value);
-  //         this.translations.set(key, value);
-  //       })
-  //     );
-  //   } catch (error) {
-  //     console.error("Error loading translations:", error);
-  //     const cachedTranslations = await this.dbService.getAllFromCache();
-      
-  //     if (Object.keys(cachedTranslations).length > 0) {
-  //       Object.entries(cachedTranslations).forEach(([key, value]) => {
-  //         this.translations.set(key, value);
-  //       });
-  //     } else {
-  //       throw new Error("Failed to load translations from both API and cache");
-  //     }
-  //   }
-  // }
+  }
 }
