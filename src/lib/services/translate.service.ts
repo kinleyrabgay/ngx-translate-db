@@ -293,20 +293,12 @@ export class TranslateService {
       //   BTN_PROFILE: { en: "Profile", fr: "Profil", it: "Profilo" },
       // };
 
-      const response = await fetch(config.endpoint, {
+      const response = await fetch(`${config.endpoint}?projectId=${config.projectId}&apiKey=${config.apiKey}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          projectId: config.projectId,
-          apiKey: config.apiKey,
-        }),
       });
-
-      const data = await response.json();
-      
-      
 
       await Promise.all(
         Object.entries(response).map(async ([key, value]) => {
