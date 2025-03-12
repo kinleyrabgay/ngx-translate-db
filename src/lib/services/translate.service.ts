@@ -17,11 +17,11 @@ export class TranslateService {
 
   constructor(
     private dbService: TranslationDBService,
-    @Optional() @Inject("TRANSLATE_CONFIG") config: TranslationConfig
+    // @Optional() @Inject("TRANSLATE_CONFIG") config: TranslationConfig
   ) {
-    if (config) {
-      this.initPromise = this.init(config);
-    }
+    // if (config) {
+    //   this.initPromise = this.init(config);
+    // }
   }
 
   /**
