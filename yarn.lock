@@ -144,13 +144,6 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^17.1.0":
-  version "17.3.12"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-17.3.12.tgz#49327f1d4fe5ff3ae31fadf742e258f5f9f00b48"
-  integrity sha512-vabJzvrx76XXFrm1RJZ6o/CyG32piTB/1sfFfKHdlH1QrmArb8It4gyk9oEjZ1IkAD0HvBWlfWmn+T6Vx3pdUw==
-  dependencies:
-    tslib "^2.3.0"
-
 "@angular/compiler-cli@^17.1.0":
   version "17.3.12"
   resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-17.3.12.tgz#d54a65383ea56bdaf474af3ae475cc1585b11a0b"

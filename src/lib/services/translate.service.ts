@@ -286,12 +286,27 @@ export class TranslateService {
   private async loadTranslations(config: TranslationConfig): Promise<void> {
     try {
       // TODO: Replace with actual API call using config.endpoint
-      const response = {
-        BTN_LOGIN: { en: "Logging from here", fr: "Connexion", it: "Accesso" },
-        BTN_REGISTER: { en: "Register", fr: "S'inscrire", it: "Registrati" },
-        BTN_LOGOUT: { en: "Logout", fr: "Déconnexion", it: "Disconnettersi" },
-        BTN_PROFILE: { en: "Profile", fr: "Profil", it: "Profilo" },
-      };
+      // const response = {
+      //   BTN_LOGIN: { en: "Logging from here", fr: "Connexion", it: "Accesso" },
+      //   BTN_REGISTER: { en: "Register", fr: "S'inscrire", it: "Registrati" },
+      //   BTN_LOGOUT: { en: "Logout", fr: "Déconnexion", it: "Disconnettersi" },
+      //   BTN_PROFILE: { en: "Profile", fr: "Profil", it: "Profilo" },
+      // };
+
+      const response = await fetch(config.endpoint, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectId: config.projectId,
+          apiKey: config.apiKey,
+        }),
+      });
+
+      const data = await response.json();
+      
+      
 
       await Promise.all(
         Object.entries(response).map(async ([key, value]) => {
