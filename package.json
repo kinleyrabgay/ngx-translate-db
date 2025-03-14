@@ -47,10 +47,11 @@
   },
   "sideEffects": false,
   "type": "module",
-  "main": "./dist/fesm2022/ngx-translate-db.mjs",
-  "module": "./dist/fesm2022/ngx-translate-db.mjs",
-  "typings": "./dist/index.d.ts",
+  "main": "fesm2022/ngx-translate-db.mjs",
+  "module": "fesm2022/ngx-translate-db.mjs",
+  "typings": "index.d.ts",
   "files": [
-    "dist"
+    "fesm2022/ngx-translate-db.mjs",
+    "index.d.ts"
   ]
 }
