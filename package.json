@@ -21,10 +21,11 @@
   ],
   "scripts": {
     "ng": "ng",
-    "build": "ng-packagr -p ng-package.json",
+    "build": "ng-packagr -p ng-package.json && npm run postbuild",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "postbuild": "rm -rf dist/esm2022"
   },
   "peerDependencies": {
     "@angular/core": "^17.1.0",
