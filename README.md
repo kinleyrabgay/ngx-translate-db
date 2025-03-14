@@ -84,6 +84,8 @@ The `appTranslate` pipe is designed to be used with Angular's `async` pipe:
 <!-- In attributes -->
 <div [title]="'TOOLTIP_KEY' | appTranslate | async">
 ```
+<!-- Passing dynamic parameter to the translation pipe -->
+{{ 'LABEL_HELLO' | appTranslate: { name: 'DevFlow' } | async }}
 
 ## API Reference
 
