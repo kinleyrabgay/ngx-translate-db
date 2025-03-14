@@ -1,9 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/ng-packagr/ng-packagr/main/src/ng-package.schema.json",
-  "dest": "dist",
+  "dest": "dist", 
   "lib": {
     "entryFile": "src/public-api.ts"
   },
-  "allowedNonPeerDependencies": ["idb", "tslib"],
-  "assets": ["README.md", "LICENSE"]
+  "allowedNonPeerDependencies": ["idb", "tslib"]
 }

@@ -51,6 +51,6 @@
   "module": "./dist/fesm2022/ngx-translate-db.mjs",
   "typings": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist/"
   ]
 }
