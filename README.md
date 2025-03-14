@@ -10,6 +10,7 @@ A robust, offline-first translation library for Angular applications with Indexe
 - 🔍 Type-safe translation keys
 - 📱 Memory efficient with automatic cleanup
 - 🎯 Zero dependencies (except Angular core)
+- ✅ Angular supports: (17)
 
 ## Installation
 
