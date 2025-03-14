@@ -1,6 +1,6 @@
 {
   "name": "ngx-translate-db",
-  "version": "17.0.4",
+  "version": "17.0.3",
   "license": "MIT",
   "description": "Angular translation library using IndexedDB for storage",
   "author": {
@@ -51,8 +51,6 @@
   "module": "./dist/fesm2022/ngx-translate-db.mjs",
   "typings": "./dist/index.d.ts",
   "files": [
-    "dist/fesm2022",
-    "dist/index.d.ts",
-    "dist/public-api.d.ts"
+    "dist"
   ]
 }
