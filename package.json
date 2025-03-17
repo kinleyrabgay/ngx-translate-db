@@ -1,6 +1,6 @@
 {
   "name": "ngx-translate-db",
-  "version": "17.0.9",
+  "version": "17.1.0",
   "license": "MIT",
   "description": "Angular translation library using IndexedDB for storage",
   "author": {
@@ -25,7 +25,10 @@
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
     "prepublishOnly": "npm run build",
-    "postbuild": "rm -rf dist/esm2022"
+    "postbuild": "rm -rf dist/esm2022",
+    "analyze": "ng build --stats-json && webpack-bundle-analyzer dist/stats.json",
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
+    "lint": "ng lint"
   },
   "peerDependencies": {
     "@angular/core": "^17.1.0",

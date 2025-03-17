@@ -218,12 +218,10 @@ export class TranslateService {
   private validateConfig(config: TranslationConfig): void {
     if (!config.acceptedLanguages?.length) {
       console.warn('acceptedLanguages must be provided and contain at least one language code');
-      throw new Error('acceptedLanguages must be provided and contain at least one language code');
     }
     
     if (!config.acceptedLanguages.includes(config.defaultLang)) {
       console.warn(`defaultLang '${config.defaultLang}' must be included in acceptedLanguages`);
-      throw new Error(`defaultLang '${config.defaultLang}' must be included in acceptedLanguages`);
     }
   }
 
