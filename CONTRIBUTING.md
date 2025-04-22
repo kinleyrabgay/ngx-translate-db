@@ -1,4 +1,4 @@
-# Contributing to ngx-translate-db
+# Contributing to @ngfly/translate-db
 
 Thank you for considering contributing to ngx-translate-db! We welcome contributions from everyone. By participating in this project, you agree to abide by our code of conduct.
 

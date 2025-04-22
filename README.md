@@ -1,4 +1,4 @@
-# ngx-translate-db
+# @ngfly/translate-db
 
 A robust, offline-first translation library for Angular applications with IndexedDB support.
 
@@ -10,12 +10,11 @@ A robust, offline-first translation library for Angular applications with Indexe
 - 🔍 Type-safe translation keys
 - 📱 Memory efficient with automatic cleanup
 - 🎯 Zero dependencies (except Angular core)
-- ✅ Angular supports: (17)
 
 ## Installation
 
 ```bash
-npm install ngx-translate-db
+npm install @ngfly/translate-db
 ```
 
 ## Quick Start
@@ -24,7 +23,7 @@ npm install ngx-translate-db
 
 ```typescript
 import { ApplicationConfig } from '@angular/core';
-import { provideTranslate } from 'ngx-translate-db';
+import { provideTranslate } from '@ngfly/translate-db';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -44,7 +43,7 @@ export const appConfig: ApplicationConfig = {
 
 ```typescript
 import { Component } from '@angular/core';
-import { TranslatePipe, TranslateService } from 'ngx-translate-db';
+import { TranslatePipe, TranslateService } from '@ngfly/translate-db';
 
 @Component({
   selector: 'app-root',
