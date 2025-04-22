@@ -10,6 +10,7 @@ A robust, offline-first translation library for Angular applications with Indexe
 - 🔍 Type-safe translation keys
 - 📱 Memory efficient with automatic cleanup
 - 🎯 Zero dependencies (except Angular core)
+- ✅ Angular supports: (17)
 
 ## Installation
 
@@ -83,6 +84,8 @@ The `appTranslate` pipe is designed to be used with Angular's `async` pipe:
 <!-- In attributes -->
 <div [title]="'TOOLTIP_KEY' | appTranslate | async">
 ```
+<!-- Passing dynamic parameter to the translation pipe -->
+{{ 'LABEL_HELLO' | appTranslate: { name: 'DevFlow' } | async }}
 
 ## API Reference
 

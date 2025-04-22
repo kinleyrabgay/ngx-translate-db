@@ -56,10 +56,10 @@ export class TranslatePipe implements PipeTransform {
    * });
    * ```
    */
-  transform(key: string): Observable<string> {
+  transform(key: string, params?: Record<string, any>): Observable<string> {
     return this.translateService.onLangChange.pipe(
       startWith(null),
-      map(() => this.translateService.instant(key))
+      map(() => this.translateService.instant(key, params))
     );
   }
 }

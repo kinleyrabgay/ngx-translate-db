@@ -20,7 +20,10 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
-    "types": ["node"]
+    "types": ["node"],
+    "removeComments": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -29,9 +32,9 @@
     "strictTemplates": true,
     "enableResourceInlining": true,
     "compilationMode": "partial",
-    "skipTemplateCodegen": false,
+    "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
     "fullTemplateTypeCheck": true
   },
-  "exclude": ["src/test.ts", "**/*.spec.ts"]
+  "exclude": ["src/test.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

@@ -1,6 +1,6 @@
 {
-  "name": "ngx-translate-db",
-  "version": "1.5.0",
+  "name": "@ngfly/translate-db",
+  "version": "0.0.1",
   "license": "MIT",
   "description": "Angular translation library using IndexedDB for storage",
   "author": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kinleyrabgay/ngx-translate-db"
+    "url": "https://github.com/kinleyrabgay/ngfly/translate-db"
   },
   "keywords": [
     "angular",
@@ -21,10 +21,14 @@
   ],
   "scripts": {
     "ng": "ng",
-    "build": "ng-packagr -p ng-package.json",
+    "build": "ng-packagr -p ng-package.json && npm run postbuild",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "postbuild": "rm -rf dist/esm2022",
+    "analyze": "ng build --stats-json && webpack-bundle-analyzer dist/stats.json",
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
+    "lint": "ng lint"
   },
   "peerDependencies": {
     "@angular/core": "^17.1.0",
@@ -46,10 +50,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "main": "./dist/fesm2022/ngx-translate-db.mjs",
-  "module": "./dist/fesm2022/ngx-translate-db.mjs",
+  "main": "./dist/fesm2022/ngfly/translate-db.mjs",
+  "module": "./dist/fesm2022/ngfly/translate-db.mjs",
   "typings": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist/"
   ]
 }

@@ -137,17 +137,19 @@ export class TranslateService {
    * @returns Translated string or key if not found
    * @throws {Error} If service is not initialized
    */
-  instant(key: string): string {
+  instant(key: string, params?: Record<string, string>): string {
     if (!this.initPromise) {
       console.warn('Translation service not initialized. Please provide configuration in your app.config.ts');
       return key;
     }
     
-    return this.loadingState.value 
+    const translation = this.loadingState.value 
       ? this.getTranslationFallback(key)
       : this.getTranslation(key);
+  
+    return this.replaceParams(translation, params);
   }
-
+  
   /**
    * Changes the current active language.
    * Emits the new language to subscribers.
@@ -216,12 +218,10 @@ export class TranslateService {
   private validateConfig(config: TranslationConfig): void {
     if (!config.acceptedLanguages?.length) {
       console.warn('acceptedLanguages must be provided and contain at least one language code');
-      throw new Error('acceptedLanguages must be provided and contain at least one language code');
     }
     
     if (!config.acceptedLanguages.includes(config.defaultLang)) {
       console.warn(`defaultLang '${config.defaultLang}' must be included in acceptedLanguages`);
-      throw new Error(`defaultLang '${config.defaultLang}' must be included in acceptedLanguages`);
     }
   }
 
@@ -326,4 +326,14 @@ export class TranslateService {
       console.warn("No cached translations found. Defaulting to keys.");
     }
   }  
+
+  // Add a new method to replace parameters in the translation string
+  private replaceParams(translation: string, params?: Record<string, string>): string {
+    if (!params) return translation;
+
+    return Object.keys(params).reduce((str, param) => {
+      const regex = new RegExp(`{${param}}`, 'g');
+      return str.replace(regex, params[param]);
+    }, translation);
+  }
 }
